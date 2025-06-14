@@ -34,11 +34,11 @@ type (
 	// NewLocationType : Represents a new location type to be created in Nautobot.
 	NewLocationType struct {
 		Name         string         `json:"name"`
-		ContentTypes []string       `json:"content_types,omitempty"`
+		ContentTypes []string       `json:"content_types"`
 		CustomFields map[string]any `json:"custom_fields,omitempty"`
 		Description  string         `json:"description,omitempty"`
 		Nestable     bool           `json:"nestable,omitempty"`
-		Parent       *string        `json:"parent,omitempty"`
+		Parent       string         `json:"parent,omitempty"`
 	}
 )
 
