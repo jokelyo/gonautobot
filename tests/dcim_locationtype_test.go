@@ -71,7 +71,7 @@ func TestClient_LocationTypeCreate(t *testing.T) {
 		Name:         "Site",
 		ContentTypes: []string{"dcim.device", "ipam.prefix", "ipam.vlan", "ipam.vlangroup"},
 		Nestable:     true,
-		Parent:       &parentID,
+		Parent:       parentID,
 		Description:  "",
 	}
 
