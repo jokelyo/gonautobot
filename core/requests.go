@@ -6,12 +6,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/josh-silvas/gonautobot/shared"
-	"github.com/rs/zerolog/log"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/josh-silvas/gonautobot/shared"
+	"github.com/rs/zerolog/log"
 )
 
 // Client : Requests data type client.

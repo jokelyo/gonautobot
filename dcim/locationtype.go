@@ -1,14 +1,15 @@
 package dcim
 
 import (
-	"errors"
-	"fmt"
-	"net/http"
 	"net/url"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/josh-silvas/gonautobot/core"
+)
+
+const (
+	dcimEndpointLocationType = "dcim/location-types/"
 )
 
 type (
@@ -44,68 +45,32 @@ type (
 
 // LocationTypeGet : Get a LocationType by UUID identifier.
 func (c *Client) LocationTypeGet(id uuid.UUID) (*LocationType, error) {
-	if id == uuid.Nil {
-		return nil, errors.New("LocationTypeGet.error.ID(ID is missing or nil)")
-	}
-	req, err := c.Request(http.MethodGet, fmt.Sprintf("dcim/location-types/%s/", id), nil, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	ret := new(LocationType)
-	return ret, c.UnmarshalDo(req, ret)
+	return core.Get[LocationType](c.Client, dcimEndpointLocationType, id)
 }
 
 // LocationTypeFilter : Get a list of LocationTypes based on query parameters.
 func (c *Client) LocationTypeFilter(q *url.Values) ([]LocationType, error) {
 	locationTypes := make([]LocationType, 0)
-	return locationTypes, core.Paginate[LocationType](c.Client, "dcim/location-types/", q, &locationTypes)
+	return locationTypes, core.Paginate[LocationType](c.Client, dcimEndpointLocationType, q, &locationTypes)
 }
 
 // LocationTypeAll : Get all LocationTypes in Nautobot.
 func (c *Client) LocationTypeAll() ([]LocationType, error) {
 	locationTypes := make([]LocationType, 0)
-	return locationTypes, core.Paginate[LocationType](c.Client, "dcim/location-types/", nil, &locationTypes)
+	return locationTypes, core.Paginate[LocationType](c.Client, dcimEndpointLocationType, nil, &locationTypes)
 }
 
 // LocationTypeCreate : Generate a new LocationType record in Nautobot.
-func (c *Client) LocationTypeCreate(obj NewLocationType) (LocationType, error) {
-	var lt LocationType
-	req, err := c.Request(http.MethodPost, "dcim/location-types/", obj, nil)
-	if err != nil {
-		return lt, err
-	}
-
-	if err := c.UnmarshalDo(req, &lt); err != nil {
-		return lt, fmt.Errorf("LocationTypeCreate.error.UnmarshalDo(%w)", err)
-	}
-	return lt, nil
+func (c *Client) LocationTypeCreate(obj NewLocationType) (*LocationType, error) {
+	return core.Create[LocationType, NewLocationType](c.Client, dcimEndpointLocationType, obj)
 }
 
 // LocationTypeUpdate : Update an existing LocationType record in Nautobot.
-func (c *Client) LocationTypeUpdate(id uuid.UUID, patch map[string]any) (LocationType, error) {
-	var lt LocationType
-	if id == uuid.Nil {
-		return lt, errors.New("LocationTypeUpdate.error.ID(ID is missing or nil)")
-	}
-	req, err := c.Request(http.MethodPatch, fmt.Sprintf("dcim/location-types/%s/", id), patch, nil)
-	if err != nil {
-		return lt, err
-	}
-	if err := c.UnmarshalDo(req, &lt); err != nil {
-		return lt, fmt.Errorf("LocationTypeUpdate.error.UnmarshalDo(%w)", err)
-	}
-	return lt, nil
+func (c *Client) LocationTypeUpdate(id uuid.UUID, patch map[string]any) (*LocationType, error) {
+	return core.Update[LocationType](c.Client, dcimEndpointLocationType, id, patch)
 }
 
 // LocationTypeDelete : Delete a LocationType by UUID identifier.
 func (c *Client) LocationTypeDelete(id uuid.UUID) error {
-	if id == uuid.Nil {
-		return errors.New("LocationTypeDelete.error.ID(ID is missing or nil)")
-	}
-	req, err := c.Request(http.MethodDelete, fmt.Sprintf("dcim/location-types/%s/", id), nil, nil)
-	if err != nil {
-		return err
-	}
-	return c.UnmarshalDo(req, nil)
+	return core.Delete(c.Client, dcimEndpointLocationType, id)
 }
